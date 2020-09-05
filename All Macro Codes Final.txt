@@ -1,0 +1,202 @@
+Sub BringData()
+'
+' Bring Data Macro
+'
+
+'
+    Cells.Select
+    Selection.Clear
+    Range("A1").Select
+    
+'Bring Data from EAST Sheet
+    Sheets("East").Select
+    Range("A1").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Selection.Copy
+    Sheets("Data").Select
+    Range("A2").Select
+    ActiveSheet.Paste
+    Range("A2").Select
+    
+'Bring Data from WEST Sheet
+    Sheets("West").Select
+    Range("A2").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("Data").Select
+    Range("A2").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(1, 0).Range("A1").Select
+    ActiveSheet.Paste
+    Range("A2").Select
+    
+'Bring Data from SOUTH Sheet
+    Sheets("South").Select
+    Range("A2").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("Data").Select
+    Range("A2").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(1, 0).Range("A1").Select
+    ActiveSheet.Paste
+    Range("A2").Select
+    
+'Bring Data from NORTH Sheet
+    Sheets("North").Select
+    Range("A2").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Sheets("Data").Select
+    Range("A2").Select
+    Selection.End(xlDown).Select
+    ActiveCell.Offset(1, 0).Range("A1").Select
+    ActiveSheet.Paste
+    Range("A2").Select
+    
+'Generate Serial Nos
+    Range("A3").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Application.CutCopyMode = False
+    Selection.DataSeries Rowcol:=xlColumns, Type:=xlLinear, Date:=xlDay, _
+        Step:=1, Trend:=False
+    Range("A3").Select
+    
+'create Table & Rename(MyData)
+    With Range("A2")
+    ActiveSheet.ListObjects.Add(SourceType:=xlSrcRange, Source:=Range(.End(xlDown), .End(xlToRight))).Name = "MyData"
+    End With
+    
+'Change Table Style
+    Range("A3").Select
+    ActiveSheet.ListObjects("MyData").TableStyle = "TableStyleMedium7"
+    
+End Sub
+-----------------------------------------------------
+Sub CopyRPT()
+'
+' CopyRPT Macro
+'
+
+'
+    Sheets("RPT").Select
+    Sheets("RPT").Copy Before:=Sheets(2)
+    Sheets("RPT (2)").Select
+    Sheets("RPT (2)").Copy Before:=Sheets(2)
+    Sheets("RPT (3)").Select
+    Sheets("RPT (3)").Copy Before:=Sheets(2)
+    
+End Sub
+-------------------------------------------------------
+Sub BringSlicers()
+'
+' Slicers Macro
+'
+Sheets("RPT").Select
+'
+'Bringing all Slicers(Date, Name, Area, & Product)
+    ActiveSheet.ChartObjects("MYCRT1").Activate
+    ActiveWorkbook.SlicerCaches.Add2(ActiveSheet.PivotTables("MYPT1"), "Date"). _
+        Slicers.Add ActiveSheet, , "Date", "Date", 56.4, 439.2, 144, 194.25
+    ActiveWorkbook.SlicerCaches.Add2(ActiveSheet.PivotTables("MYPT1"), "Product"). _
+        Slicers.Add ActiveSheet, , "Product", "Product", 94.2, 477, 144, 194.25
+    ActiveWorkbook.SlicerCaches.Add2(ActiveSheet.PivotTables("MYPT1"), "Name"). _
+        Slicers.Add ActiveSheet, , "Name", "Name", 132, 514.8, 144, 194.25
+    ActiveWorkbook.SlicerCaches.Add2(ActiveSheet.PivotTables("MYPT1"), "Area"). _
+        Slicers.Add ActiveSheet, , "Area", "Area", 169.8, 552.6, 144, 194.25
+        
+'Resizing Width of All Slicers
+    ActiveSheet.Shapes.Range(Array("Area", "Name", "Product", "Date")).Select
+    Selection.ShapeRange.Width = 230.4
+    '239.76
+    
+'Setting up Slicer-Area
+    ActiveSheet.Shapes.Range(Array("Area")).Select
+    ActiveSheet.Shapes("Area").IncrementLeft 202.2
+    ActiveSheet.Shapes("Area").IncrementTop -168
+    ActiveWorkbook.SlicerCaches("Slicer_Area").Slicers("Area").NumberOfColumns = 4
+    ActiveSheet.Shapes("Area").ScaleHeight 0.2501930502, msoFalse, _
+        msoScaleFromTopLeft
+        
+'Setting up Slicer-Name
+    ActiveSheet.Shapes.Range(Array("Name")).Select
+    ActiveWorkbook.SlicerCaches("Slicer_Name").Slicers("Name").NumberOfColumns = 3
+    ActiveSheet.Shapes("Name").IncrementLeft 240.6
+    ActiveSheet.Shapes("Name").IncrementTop -81
+    ActiveSheet.Shapes("Name").ScaleHeight 0.3613899614, msoFalse, _
+        msoScaleFromTopLeft
+        
+'Setting up Slicer-Product
+    ActiveSheet.Shapes.Range(Array("Product")).Select
+    ActiveWorkbook.SlicerCaches("Slicer_Product").Slicers("Product"). _
+        NumberOfColumns = 2
+    ActiveSheet.Shapes("Product").IncrementLeft 274.2
+    ActiveSheet.Shapes("Product").IncrementTop 33
+    ActiveSheet.Shapes("Product").IncrementLeft 4.2
+    ActiveSheet.Shapes("Product").IncrementTop -5.4
+    ActiveSheet.Shapes("Product").ScaleHeight 0.4694980695, msoFalse, _
+        msoScaleFromTopLeft
+        
+'Setting up Slicer-Date
+    ActiveSheet.Shapes.Range(Array("Date")).Select
+    ActiveWorkbook.SlicerCaches("Slicer_Date").Slicers("Date").NumberOfColumns = 2
+    ActiveSheet.Shapes("Date").IncrementLeft 316.2
+    ActiveSheet.Shapes("Date").IncrementTop 156.6
+    ActiveSheet.Shapes("Date").ScaleHeight 0.694980695, msoFalse, _
+        msoScaleFromTopLeft
+        
+'Changing Slicers-Colors
+    ActiveWorkbook.SlicerCaches("Slicer_Date").Slicers("Date").Style = _
+        "SlicerStyleDark6"
+        
+    ActiveSheet.Shapes.Range(Array("Product")).Select
+    ActiveWorkbook.SlicerCaches("Slicer_Product").Slicers("Product").Style = _
+        "SlicerStyleDark5"
+        
+    ActiveSheet.Shapes.Range(Array("Name")).Select
+    ActiveWorkbook.SlicerCaches("Slicer_Name").Slicers("Name").Style = _
+        "SlicerStyleDark4"
+        
+    ActiveSheet.Shapes.Range(Array("Area")).Select
+    ActiveWorkbook.SlicerCaches("Slicer_Area").Slicers("Area").Style = _
+        "SlicerStyleDark2"
+        
+'Selecting all Slicers & copy to Dashboard
+    ActiveSheet.Shapes.Range(Array("Area", "Name", "Product", "Date")).Select
+    Selection.Cut
+    Sheets("Dashboard").Select
+    Range("Q1").Select
+    ActiveSheet.Paste
+    Range("V25").Select
+    
+End Sub
+------------------------------------------------------------
+Sub DeleteAll()
+'
+' Delete Macro
+'
+Sheets("Dashboard").Select
+'
+'Delete Dashboard Shapes
+    ActiveSheet.ChartObjects("MYCRT1").Activate
+    ActiveSheet.Shapes.SelectAll
+    Selection.Delete
+    
+'Delete Sheets(RPT, RPT(2), RPT(3), & RPT(4))
+    Sheets(Array("RPT (4)", "RPT (3)", "RPT (2)", "RPT")).Select
+    'Sheets("RPT").Activate
+    ActiveWindow.SelectedSheets.Delete
+    
+'Clear MyData-Table
+    Range("MyData[#All]").Select
+    Selection.Clear
+    Range("A2").Select
+    
+End Sub
